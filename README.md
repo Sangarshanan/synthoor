@@ -1,3 +1,3 @@
 # Synthoor
 
-Just a Synth.
+A Toy Software Synth.
