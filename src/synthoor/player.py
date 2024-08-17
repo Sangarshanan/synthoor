@@ -5,8 +5,6 @@ import time
 
 import sounddevice as sd
 
-import soundcard as sc
-
 import numpy as np
 
 from .config import FPS
@@ -112,23 +110,8 @@ def stop_recording():
 
 
 def _get_default_sc_device():
+    return None    
 
-    global _oe
-
-    if sc is None:
-        return None
-    
-    if _oe:
-        return None
-    
-    try:
-        return sc.default_speaker().id
-    
-    except:
-        _oe += 1
-    
-
-_oe = 0
 _ot = 0
 _od = _get_default_sc_device()
 
