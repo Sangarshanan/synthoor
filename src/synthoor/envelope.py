@@ -83,7 +83,7 @@ def gate2events(gate, v0=0, index=0):
             
     states.append((end, 'continue'))
     
-    return states, v0, end
+    return states, v0
 
 
 #
@@ -131,36 +131,27 @@ class Envelope(Sound):
 
     def forward(self, gate):
         
-        if isinstance(gate, np.ndarray):
-            states, self._lgate, end = gate2events(gate, self._lgate, self.index)
-        else:
-            states = gate
-
+        states, self._lgate = gate2events(gate, self._lgate, self.index)
         index = self.index
-        
-        # TODO: This code assumes the envelope frame index and the gate frame
-        # index are synchronized (the same). In practice this is correct, but
-        # it should not be assumed. Instead the gate itself should include 
-        # its buffer start and end index. 
 
         curves = []
-        
+
         for event_index, event in states:
-            
+
             while index < event_index:
                 curves.append(self.get_curve(index, event_index))
                 index += len(curves[-1])
-                    
+
             if event == 'open' and self._state != 'attack':
                 self._state = 'attack'
                 self._start = index
                 self._valu0 = self._valu1
-            
+
             if event == 'close' and self._state not in ('release', None):
                 self._state = 'release'
                 self._start = index
                 self._valu0 = self._valu1
-            
+
         return np.concatenate(curves)[:,None]
     
     def get_curve(self, start, end):

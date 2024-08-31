@@ -38,10 +38,8 @@ class BaseFilter(Sound):
 
         if key_modulation is None:
             freq = self.freq
-        elif isinstance(key_modulation, np.ndarray):
-            freq = key2freq(self.key + np.mean(key_modulation[-1]).item())
         else:
-            freq = key2freq(self.key + key_modulation)
+            freq = key2freq(self.key + np.mean(key_modulation[-1]).item())
 
         freq = int(freq)
 
@@ -162,71 +160,3 @@ def signal_butter(wp, gpass=3, gstop=24, btype='lowpass', output='ba', fs=FPS):
         sos = scipy.signal.butter(N, Wn, btype, output='sos', fs=fs)
         z = scipy.signal.sosfilt_zi(sos)[:,:,None]
         return sos, z
-
-
-class PeakFilter(BaseFilter):
-    
-    def __init__(self, freq=8192, q=10.):
-        
-        super().__init__(freq)
-        
-        self.q = q
-
-        self.warmup()
-
-    def warmup(self):
-
-        for freq in sorted(set(fround(f) for f in range(1, FPS//2))):
-            signal_iirpeak(freq, self.q)
-            time.sleep(0)
-
-    def filter(self, x, freq, z=None):
-        
-        b, a, z0 = signal_iirpeak(freq, self.q)
-        return scipy.signal.lfilter(b, a, x, 0, z0 if z is None else z) 
-        
-
-@functools.lru_cache(maxsize=4096)
-def signal_iirpeak(w0, q, fs=FPS):
-
-    nyq = fs // 2
-    w0 = max(1, min(w0, nyq - 1))
-
-    b, a = scipy.signal.iirpeak(w0, q, fs=fs)
-    z = scipy.signal.lfilter_zi(b, a)[:,None]
-
-    return b, a, z
-
-
-class ResonantFilter(ButterFilter):
-    
-    def __init__(
-        self, 
-        freq=8192, 
-        btype='lowpass', 
-        db=24, 
-        bandwidth=500, 
-        output='ba',
-        resonance=0,
-        q=10,
-        ):
-        
-        super().__init__(freq, btype, db, bandwidth, output)
-        
-        self.resonance = resonance
-        self.q = q
-        self.pf = PeakFilter()
-
-    def forward(self, x, key_modulation=None):
-        a0 = super().forward(x, key_modulation)
-
-        if self.btype[0] == 'b' or self.resonance <= 0:
-            return a0
-
-        resonance = max(0, self.resonance)
-
-        self.pf.freq = self.freq
-        self.pf.q = max(5, self.q if self.q else resonance ** 2)
-
-        a1 = self.pf(a0, key_modulation)
-        return a0 + a1 * self.resonance

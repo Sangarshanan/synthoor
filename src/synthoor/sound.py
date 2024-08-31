@@ -99,17 +99,7 @@ class Sound(object):
         if note is not None:
             self.note = note
 
-        self.set(**kwargs)
-
         add_sound(self)
-
-    def set(self, **kwargs):
-
-        for k, v in kwargs.items():
-            if settable(self, k):
-                setattr(self, k, v)  
-    
-        return self
 
     def reset(self, shared=False):
         
@@ -243,7 +233,6 @@ class LatencyGate(Sound):
         #states = []
 
         a0 = np.zeros((self.frames, 1))
-        v0 = self.value
         i0 = 0
 
         t0 = time.time()
@@ -268,14 +257,9 @@ class LatencyGate(Sound):
                 self.value = 1
                 self.opened = True
                 i0 = i1
-                #if df <= i1:
-                #    states.append((self.index + i1, 'open'))          
-
             elif self.value == 1 and event == 'close':
                 self.value = 0
                 a0[i0:i1] += 1
-                #if df <= i1:
-                #    states.append((self.index + i1, 'close'))          
 
             self.states.pop(0)
 
@@ -283,11 +267,10 @@ class LatencyGate(Sound):
             a0[i0:self.frames] += 1
 
         #states.append((self.index + self.frames, 'continue'))          
-
         return a0
 
-        
-    def open(self, t=None, dt=None, **kwargs):
+
+    def open(self, t=None, dt=None):
         """Schedule gate open at specified time.
 
         The schedule can be an absolute time given by the argument `t`, or 
@@ -351,22 +334,15 @@ class GatedSound(Sound):
         super().__init__(freq=freq, amp=amp)
         self.gate = LatencyGate()
 
-    @property
-    def done(self):
-        return Sound.done.fget(self) if self.gate.opened else False
 
-    def play(self, note=None, duration=None, **kwargs):
+    def play(self, note=None, duration=None):
         """Play given note monophonically.
         
         Args:
             note (float): Note to play in units of semitones 
                 where 60 is middle C.
             duration (float, optional): Duration to play note, in whole notes.    
-            **kwargs: Properties of intrument to modify.
         """
-        t = kwargs.pop('t', None)
-        dt = kwargs.pop('dt', None)
-        super().play(note, **kwargs)
-
-        self.gate.open(t, dt)
+        super().play(note)
+        self.gate.open()
         self.gate.close(dt=duration * 4 * 60 / get_bpm())

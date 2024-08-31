@@ -44,7 +44,7 @@ Use the components to generate Sounds of different shapes & timbres
 -  Subtractive synthesis
 -  Additive synthesis
 -  Frequency modulation synthesis
--  Wavetable synthesis
+-  WaveTable synthesis
 -  Granular synthesis
   
 and so on..

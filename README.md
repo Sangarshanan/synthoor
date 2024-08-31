@@ -7,4 +7,4 @@ A Toy Software Synth.
 pip install synthoor
 ```
 
-Thank to [Jupylet](https://jupylet.readthedocs.io/en/latest/programmers_reference_guide/synthesis.html)
+Ripped off [Jupylet](https://github.com/nir/jupylet/)
