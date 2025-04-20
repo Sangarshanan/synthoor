@@ -54,3 +54,4 @@ MANIFEST
 # Configuration
 .env
 .credentials
+dump.rdb

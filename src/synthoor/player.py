@@ -10,13 +10,13 @@ import numpy as np
 from .config import FPS
 
 logger = logging.getLogger(__name__)
-    
+
 
 def disable_audio():
     global sd
     sd = None
 
-    
+
 _schedule = None
 
 
@@ -32,10 +32,14 @@ def get_schedule():
 def t2frames(t):
     return int(FPS * t)
 
+
 def get_time():
     return time.time()
 
+
 _bpm = 240
+
+
 def get_bpm():
     return _bpm
 
@@ -44,13 +48,14 @@ _worker_tid = None
 
 
 def _init_worker_thread():
-    logger.info('Enter _init_worker_thread().')
+    logger.info("Enter _init_worker_thread().")
 
     global _worker_tid
-    
+
     if not _worker_tid and sd is not None:
         _worker_tid = _thread.start_new_thread(_start_sound_stream, ())
-        
+
+
 #
 # This queue is only used to keep the sound stream running.
 #
@@ -60,20 +65,21 @@ _sp = {}
 
 def _start_sound_stream():
     """Start the sound device output stream handler."""
-    logger.info('Enter _start_sound_stream().')
-    
-    while True:
+    logger.info("Enter _start_sound_stream().")
 
-        if _sp.pop('reset', None):
+    while True:
+        if _sp.pop("reset", None):
             _reset()
-        with sd.OutputStream(samplerate=FPS, channels=2, callback=_stream_callback, **_sp):
+        with sd.OutputStream(
+            samplerate=FPS, channels=2, callback=_stream_callback, **_sp
+        ):
             _workerq.get()
-    
+
 
 _nresets = 0
 
+
 def _reset():
-    
     global _nresets
 
     sd._exit_handler()
@@ -92,16 +98,14 @@ _al = []
 
 
 def start_recording(limit=60):
-
     global _al_seconds
     global _al
-    
-    _al_seconds = limit    
+
+    _al_seconds = limit
     _al.clear()
 
 
 def stop_recording():
-
     global _al_seconds
 
     a0 = np.concatenate(_al)
@@ -110,7 +114,8 @@ def stop_recording():
 
 
 def _get_default_sc_device():
-    return None    
+    return None
+
 
 _ot = 0
 _od = _get_default_sc_device()
@@ -118,6 +123,7 @@ _od = _get_default_sc_device()
 
 _dt = []
 _safety_event0 = 0
+
 
 def _stream_callback(outdata, frames, _time, status):
     """Compute and set the sound data to be played in a few milliseconds.
@@ -134,7 +140,6 @@ def _stream_callback(outdata, frames, _time, status):
     dt = _time.outputBufferDacTime - _time.currentTime
 
     if t0 - _ot > 1:
-
         _ot = t0
         od_ = _get_default_sc_device()
 
@@ -143,9 +148,9 @@ def _stream_callback(outdata, frames, _time, status):
             _set_stream_params(reset=True)
 
     set_schedule(t0 + dt)
-    
+
     if status:
-        logger.warning('Stream callback called with status: %r.', status)
+        logger.warning("Stream callback called with status: %r.", status)
         _safety_event0 = t0
 
     #
@@ -154,20 +159,20 @@ def _stream_callback(outdata, frames, _time, status):
     #
 
     sounds = _get_sounds()
-    
+
     if not sounds:
-        a0 = np.zeros_like(outdata)  
-    else: 
+        a0 = np.zeros_like(outdata)
+    else:
         a0 = _mix_sounds(sounds, frames)
 
     a0 = (a0 * _master_volume).clip(-1, 1)
-    
+
     if t0 < _safety_event0 + 1:
         a0 *= max(0.01, min(1, t0 - _safety_event0))
 
     outdata[:] = a0
 
-    # 
+    #
     # Aggregate the output data and timers for the oscilloscope.
     #
 
@@ -176,13 +181,15 @@ def _stream_callback(outdata, frames, _time, status):
         _dt.pop(0)
 
     _al.append(a0)
-    _dt.append((
-        t0, 
-        frames, 
-        _time.inputBufferAdcTime,
-        _time.outputBufferDacTime,
-        _time.currentTime,
-    ))
+    _dt.append(
+        (
+            t0,
+            frames,
+            _time.inputBufferAdcTime,
+            _time.outputBufferDacTime,
+            _time.currentTime,
+        )
+    )
 
 
 _master_volume = 0.5
@@ -195,6 +202,7 @@ def get_master_volume():
 def set_master_volume(amp):
     global _master_volume
     _master_volume = amp
+
 
 #
 # A list of all currently playing sound objects.
@@ -219,7 +227,7 @@ def add_sound(sound):
 
     _sounds0.append(sound)
 
-         
+
 def _get_sounds():
     """Get currently playing sound objects."""
 
@@ -241,7 +249,7 @@ def _get_sounds():
     _sounds1[:] = sl_
 
     return sl_
-      
+
 
 def _mix_sounds(sounds, frames):
     """Mix sound data from given sounds into a single numpy array.
@@ -267,6 +275,5 @@ def _mix_sounds(sounds, frames):
 
 
 def _mix_sounds0(sounds, frames):
-
     al = [s.consume(frames) for s in sounds]
     return np.stack(al).sum(0)
