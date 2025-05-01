@@ -2,13 +2,19 @@
 
 A Toy Software Synth.
 
-
 ```sh
 pip install synthoor
 ```
 
+### Setup for Tutorial
 
-## Usage
+Install [Docker](https://www.docker.com/get-started/) and [docker-compose](https://docs.docker.com/compose/install/) and run the below command
+
+```sh
+docker-compose up
+```
+
+### Usage
 
 Initialize a simple Sine wave oscillator and plot it
 

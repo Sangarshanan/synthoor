@@ -1,20 +1,5 @@
 # Get Started
 
-This section contains all the material for my tutorial Build a Synthesizer with Python. To get started install all the dependencies using `uv`
-
-
-```sh
-uv pip install -r requirements.txt
-```
-
-Start Jupyter notebook and open `1.ipynb`
-
-```sh
-jupyter notebook
-```
-
-Yayy! you are now all set to get started
-
 The goal of this tutorial is to break down the abstractions that make up a synthesizer by building one using Python, its scientific computing libraries, and Librosa. We will build the basic components of a modern digital synth from scratch. Along the way, you'll learn DSP and audio programming concepts. By the end, you'll be able to make your own tunes with Python! We'll start with theory and then work through Jupyter notebooks both individually and as a group.
 
 This tutorial will be a lot of fun if you’re a musically inclined Python programmer. As someone interested in music, you will discover the components that make up a synthesizer by literally building & making music with it and as someone interested in Python, you’ll learn a lot about audio programming and signal processing techniques.
