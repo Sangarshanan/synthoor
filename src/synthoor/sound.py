@@ -84,19 +84,17 @@ class Sound(object):
             if isinstance(s, Sound):
                 getattr(s, name)(*args, **kwargs)
 
-    def play(self, note=None, **kwargs):
+    def play(self, note=60, velocity=127):
         """Play given note monophonically.
 
         Args:
             note (float): Note to play in units of semitones
                 where 60 is middle C.
-            **kwargs: Properties of intrument to modify.
+            velocity (int): MIDI velocity (0-127).
         """
         self.reset(self._shared)
-
-        if note is not None:
-            self.note = note
-
+        self.freq = key2freq(note)
+        self.velocity = velocity
         add_sound(self)
 
     def reset(self, shared=False):
@@ -328,14 +326,15 @@ class GatedSound(Sound):
         super().__init__(freq=freq, amp=amp)
         self.gate = LatencyGate()
 
-    def play(self, note=None, duration=None):
+    def play(self, note=60, duration=1, velocity=127):
         """Play given note monophonically.
 
         Args:
             note (float): Note to play in units of semitones
                 where 60 is middle C.
             duration (float, optional): Duration to play note, in whole notes.
+            velocity (int): MIDI velocity (0-127).
         """
-        super().play(note)
+        super().play(note=note, velocity=velocity)
         self.gate.open()
         self.gate.close(dt=duration * 4 * 60 / get_bpm())

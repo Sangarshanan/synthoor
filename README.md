@@ -52,13 +52,11 @@ Programming Synthesizers as Classes
 class SimpleSynth(GatedSound):
 
     def __init__(self):
-
         super().__init__()
-
         self.osc0 = Oscillator('sine')
 
     def forward(self):
-        
+
         g0 = self.gate()
         a0 = self.osc0()
 
