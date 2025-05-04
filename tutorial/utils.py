@@ -14,5 +14,5 @@ sample_space = np.linspace(
 )
 
 # Convert Frequency in Hz to Angular Frequency cause that is what numpy needs to create a wave
-def angular_freq(frequency, sample_space=sample_space):
+def phase_from_frequency(frequency, sample_space=sample_space):
     return 2*np.pi*frequency*sample_space

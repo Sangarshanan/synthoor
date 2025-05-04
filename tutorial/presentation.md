@@ -13,6 +13,12 @@
 
 # History of Synthesizers
 
+^ Nerd out about synths, https://en.wikipedia.org/wiki/Synthesizer
+
 ---
 
-# That's all folks!
+# Onto the Notebooks...
+
+---
+
+# Thank You
