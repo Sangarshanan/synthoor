@@ -56,4 +56,6 @@ MANIFEST
 .credentials
 dump.rdb
 
-tutorial/solutions/all.py
+# Solutions (temp)
+tutorial/static/sol.py
+
