@@ -14,25 +14,21 @@ logger = logging.getLogger(__name__)
 
 
 class BaseFilter(Sound):
-    
     def __init__(self, freq=8192):
-        
         super().__init__(freq=freq)
-        
+
         self._f = None
         self._x = None
         self._z = None
 
     def reset(self, shared=False):
-        
         super().reset(shared)
 
         self._f = None
         self._x = None
         self._z = None
-        
+
     def forward(self, x, key_modulation=None):
-        
         if self._x is None:
             self._x = x * 0
 
@@ -44,7 +40,6 @@ class BaseFilter(Sound):
         freq = int(freq)
 
         if self._f == freq:
-
             a0, self._z = self.filter(x, self._f, self._z)
 
             self._f = freq
@@ -52,81 +47,75 @@ class BaseFilter(Sound):
             return a0
 
         if self._f is None:
-
             xx = np.concatenate((self._x, x))
             a1, self._z = self.filter(xx, freq)
-            a1 = a1[-len(x):]
+            a1 = a1[-len(x) :]
 
             self._f = freq
             self._x = x
             return a1
 
         a0, self._z = self.filter(x, self._f, self._z)
-        
+
         xx = np.concatenate((self._x, x))
         a1, self._z = self.filter(xx, freq)
-        a1 = a1[-len(x):]
+        a1 = a1[-len(x) :]
 
         self._f = freq
         self._x = x
 
-        ww = np.arange(0., 1., 1/len(x))[:,None]
-        a1 = a1 * ww + a0 * (1. - ww)
+        ww = np.arange(0.0, 1.0, 1 / len(x))[:, None]
+        a1 = a1 * ww + a0 * (1.0 - ww)
         return a1
-            
+
     def filter(self, x, freq, z=None):
         return x, None
-    
+
 
 def fround(freq):
     return key2freq(round(freq2key(freq), 1))
 
 
 class ButterFilter(BaseFilter):
-    
-    def __init__(self, freq=8192, btype='lowpass', db=24, bandwidth=500, output='ba'):
-        
+    def __init__(self, freq=8192, btype="lowpass", db=24, bandwidth=500, output="ba"):
         super().__init__(freq)
-        
+
         self.bandwidth = bandwidth
         self.output = output
-        self.btype = {'l': 'lowpass', 'h': 'highpass', 'b': 'bandpass'}[btype[0]]
+        self.btype = {"l": "lowpass", "h": "highpass", "b": "bandpass"}[btype[0]]
         self.db = db
 
         self.warmup()
 
     def warmup(self):
-
-        for freq in sorted(set(fround(f) for f in range(1, FPS//2))):
+        for freq in sorted(set(fround(f) for f in range(1, FPS // 2))):
             signal_butter(self.get_wp(freq), 3, self.db, self.btype, self.output)
             time.sleep(0)
 
     def get_wp(self, freq):
-
         freq = key2freq(round(freq2key(freq), 1))
 
         nyq = FPS // 2
 
-        if self.btype[:3] in ('low', 'hig'):
-            return max(1, min(nyq-1, freq))
+        if self.btype[:3] in ("low", "hig"):
+            return max(1, min(nyq - 1, freq))
 
-        lc = max(1, min(nyq-1, freq - self.bandwidth / 2))
-        hc = max(1, min(nyq-1, freq + self.bandwidth / 2))
-        
+        lc = max(1, min(nyq - 1, freq - self.bandwidth / 2))
+        hc = max(1, min(nyq - 1, freq + self.bandwidth / 2))
+
         return (lc, hc)
 
     def filter(self, x, freq, z=None, _retry=True):
-        
         try:
             wp = self.get_wp(freq)
 
-            if self.output == 'ba':
+            if self.output == "ba":
                 b, a, z0 = signal_butter(wp, 3, self.db, self.btype, self.output)
-                return scipy.signal.lfilter(b, a, x, 0, z0 if z is None else z)                
+                return scipy.signal.lfilter(b, a, x, 0, z0 if z is None else z)
             else:
                 sos, z0 = signal_butter(wp, 3, self.db, self.btype, self.output)
                 return scipy.signal.sosfilt(sos, x, 0, z0 if z is None else z)
-        
+
         except ValueError:
             if z is None or not _retry:
                 raise
@@ -135,14 +124,13 @@ class ButterFilter(BaseFilter):
 
 
 @functools.lru_cache(maxsize=4096)
-def signal_butter(wp, gpass=3, gstop=24, btype='lowpass', output='ba', fs=FPS):
-
+def signal_butter(wp, gpass=3, gstop=24, btype="lowpass", output="ba", fs=FPS):
     nyq = fs // 2
 
-    if btype[:3] == 'low':
+    if btype[:3] == "low":
         wp = min(wp, nyq - 1)
         ws = min(wp * 2, nyq)
-    elif btype[:4] == 'high':
+    elif btype[:4] == "high":
         wp = max(wp, 1)
         ws = wp / 2
     else:
@@ -151,12 +139,12 @@ def signal_butter(wp, gpass=3, gstop=24, btype='lowpass', output='ba', fs=FPS):
 
     N, Wn = scipy.signal.buttord(wp, ws, gpass, gstop, fs=fs)
 
-    if output == 'ba':
-        b, a = scipy.signal.butter(N, Wn, btype, output='ba', fs=fs)
-        z = scipy.signal.lfilter_zi(b, a)[:,None]
+    if output == "ba":
+        b, a = scipy.signal.butter(N, Wn, btype, output="ba", fs=fs)
+        z = scipy.signal.lfilter_zi(b, a)[:, None]
         return b, a, z
 
     else:
-        sos = scipy.signal.butter(N, Wn, btype, output='sos', fs=fs)
-        z = scipy.signal.sosfilt_zi(sos)[:,:,None]
+        sos = scipy.signal.butter(N, Wn, btype, output="sos", fs=fs)
+        z = scipy.signal.sosfilt_zi(sos)[:, :, None]
         return sos, z

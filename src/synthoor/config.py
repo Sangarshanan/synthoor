@@ -9,4 +9,4 @@ LATENCY = 0.03
 
 _LOG_C4 = math.log(MIDDLE_C)
 _LOG_CC = math.log(2) / 12
-_LOG_CX = _LOG_C4 - 60 * _LOG_CC    
+_LOG_CX = _LOG_C4 - 60 * _LOG_CC

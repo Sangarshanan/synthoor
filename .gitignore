@@ -54,3 +54,8 @@ MANIFEST
 # Configuration
 .env
 .credentials
+dump.rdb
+
+# Solutions (temp)
+tutorial/static/sol.py
+
