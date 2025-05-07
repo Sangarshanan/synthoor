@@ -1,5 +1,7 @@
 # Get Started
 
+[Pycon US 2025](https://us.pycon.org/2025/schedule/presentation/19/)
+
 The goal of this tutorial is to break down the abstractions that make up a synthesizer by building one using Python, its scientific computing libraries, and Librosa. We will build the basic components of a modern digital synth from scratch. Along the way, you'll learn DSP and audio programming concepts. By the end, you'll be able to make your own tunes with Python! We'll start with theory and then work through Jupyter notebooks both individually and as a group.
 
 This tutorial will be a lot of fun if you’re a musically inclined Python programmer. As someone interested in music, you will discover the components that make up a synthesizer by literally building & making music with it and as someone interested in Python, you’ll learn a lot about audio programming and signal processing techniques.
@@ -84,59 +86,10 @@ An LFO modulating amplitude creates the tremolo effect. LFOs can also be summed 
 LFOs are used a lot in dubstep and bass heavy electronic tracks for creating a sort of wobble effect.
 
 
-### Further Reading
+### Reading
 
 - https://www.aulart.com/blog/oscillator-waveforms-types-and-uses-part-i/#!
 - https://blog.soundparticles.com/synth-tutorial-eg-explained
 - https://www.musicgateway.com/blog/how-to/what-is-a-synthesizer-the-beginners-guide-together-in-electric-dreams
 - https://www.reddit.com/r/Python/comments/lw50ne/making_a_synthesizer_using_python/
 - https://jupylet.readthedocs.io/en/latest/programmers_reference_guide/synthesis.html
-
-### TL;DR Notes
-
-**Oscillator**
-
-Generate the waveforms.
-
-- Frequency
-- Amplitude
-- WaveType (Sine, Sawtooth)
-- Duration
-
-**Filter**
-
-Modify frequency.
-
-- Cutoff frequency
-- Bandwidth
-- Q (quality) factor
-
-
-**Envelope**
-
-Modulate sound over time.
-
-- ASDR (4 stages)
-
-**Arpeggio** (TODO)
-
-Convert chords into arpeggios/ loops of notes
-
-- Up (highest to lowest note)
-- Down
-- Random
-
-**Sound Synthesis** (TODO)
-
-Use the components to generate Sounds of different shapes & timbres
-
--  Subtractive synthesis
--  Additive synthesis
--  Frequency modulation synthesis
--  WaveTable synthesis
--  Granular synthesis
-
-
-**Controller** (TODO)
-
-MIDI Keyboard

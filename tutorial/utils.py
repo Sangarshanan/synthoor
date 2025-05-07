@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+from scipy import signal
 from scipy.fft import fft, fftfreq
 
 sample_rate = 44100  # CD-quality audio (samples per second)
@@ -63,3 +63,25 @@ def plot_fft_simple(ax, y, fs, title, max_freq_plot, line_color='blue'):
          ax.set_ylim(0, np.max(relevant_yf_pos) * 1.1)
     else:
         ax.set_ylim(0, 0.1) # Default if no significant peaks
+
+def plot_fft_and_filter_response(ax, audio_y, b, a, fs, title, color='blue', cutoff_freq=None):
+    N = len(audio_y)
+    # Audio FFT
+    yf_audio = np.abs(fft(audio_y)[0:N//2]) / N * 2
+    xf_audio = fftfreq(N, 1/fs)[0:N//2]
+    ax.plot(xf_audio, 20 * np.log10(yf_audio + 1e-9), color=color, alpha=0.5, label='Audio Spectrum')
+
+    # Filter Response
+    w_filt, h_filt = signal.freqz(b, a, worN=2048, fs=fs)
+    ax.plot(w_filt, 20 * np.log10(np.abs(h_filt) + 1e-9), color='black', linestyle='-', linewidth=1.5, label='Filter Response')
+
+    ax.set_title(title)
+    ax.set_xlabel('Frequency [Hz]')
+    ax.set_ylabel('Magnitude [dB]')
+    # Zoom to see the effect around the cutoff, but also some higher frequencies
+    ax.set_xlim(0, cutoff_freq * 8 if cutoff_freq else fs / 4)
+    ax.set_ylim(-80, 20) # Allow for positive dB from resonance
+    ax.grid(True, which='both', linestyle='--')
+    if cutoff_freq:
+        ax.axvline(cutoff_freq, color='red', linestyle=':', label=f'Cutoff @ {cutoff_freq}Hz')
+    ax.legend(fontsize='small')

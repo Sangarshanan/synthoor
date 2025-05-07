@@ -1,6 +1,6 @@
 # Synthoor
 
-A Toy Software Synth.
+A Toy Software Synth written in Python.
 
 ```sh
 pip install synthoor
@@ -8,11 +8,29 @@ pip install synthoor
 
 ### Setup for Tutorial
 
-Install [Docker](https://www.docker.com/get-started/) and [docker-compose](https://docs.docker.com/compose/install/) and run the below command
+Hope you have [Python 3.8+](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to install the package
+
+```sh
+uv pip install --system .
+uv venv synthoor # create a virtual environment
+jupyter notebook
+```
+
+Try to get a local venv setup working because we need the sounddevice module to run the package but if you are not able to get it working, you can also install [Docker](https://www.docker.com/get-started/) and [docker-compose](https://docs.docker.com/compose/install/)
 
 ```sh
 docker-compose up
 ```
+
+Or
+
+```
+docker build -t synthoor .
+docker run -it --rm -p 8888:8888 synthoor
+```
+
+**Extra:** The last section of the tutorial directly uses the package which would not directly work with docker because it needs a sounddevice, If you are on a Linux machine with PortAudio you can add `--device /dev/snd` to the docker run command and for MacOs follow this instruction: https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html
+
 
 ### Usage
 

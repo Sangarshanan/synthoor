@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     libportaudio2 \
     build-essential \
+    alsa-utils \
     && rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip, setuptools & uv
@@ -29,4 +30,6 @@ WORKDIR /tutorial
 EXPOSE 8888
 
 # Command to start Jupyter Notebook
+# When running this container, ensure you share the host's sound device, e.g.:
+# docker run -it --rm -p 8888:8888 --device /dev/snd <your_image_name>
 CMD ["jupyter", "notebook", "--ip", "0.0.0.0", "--port", "8888", "--allow-root", "--no-browser"]
