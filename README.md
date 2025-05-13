@@ -8,7 +8,7 @@ pip install synthoor
 
 ### Setup for Tutorial
 
-Hope you have [Python 3.8+](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to install the package
+Hope you have [Python 3.10+](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to install the package
 
 ```sh
 uv venv synthoor --python 3.10 # create a virtual environment 3.10+
