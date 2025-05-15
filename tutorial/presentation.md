@@ -74,4 +74,8 @@ autoscale: true
 
 # Thank You 🙏
 
+Feedback Form ➡️
+
 https://forms.gle/u4iqu1QNMdDkVgTk8
+
+![right fit](https://raw.githubusercontent.com/Sangarshanan/synthoor/refs/heads/main/tutorial/static/feedback.png)
