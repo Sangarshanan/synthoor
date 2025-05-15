@@ -8,7 +8,7 @@ pip install synthoor
 
 ### Setup for Tutorial
 
-Hope you have [Python 3.10+](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to install the package
+Hope you have [Python>=3.10](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to get everything set up locally.
 
 ```sh
 uv sync
