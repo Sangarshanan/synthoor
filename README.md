@@ -12,7 +12,7 @@ Hope you have [Python 3.10+](https://www.python.org/downloads/) already, Once yo
 
 ```sh
 uv venv synthoor --python 3.10 # create a virtual environment 3.10+
-source synthoor/bin/activate.fish
+source synthoor/bin/activate
 uv pip install .
 jupyter notebook
 ```
