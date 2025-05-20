@@ -8,13 +8,11 @@ pip install synthoor
 
 ### Setup for Tutorial
 
-Hope you have [Python 3.10+](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to install the package
+Hope you have [Python>=3.10](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to get everything set up locally.
 
 ```sh
-uv venv synthoor --python 3.10 # create a virtual environment 3.10+
-source synthoor/bin/activate
-uv pip install .
-jupyter notebook
+uv sync
+uv run jupyter notebook
 ```
 
 Try to get a local venv setup working because we need the sounddevice module to run the package but if you are not able to get it working, you can also install [Docker](https://www.docker.com/get-started/) and [docker-compose](https://docs.docker.com/compose/install/)
