@@ -66,8 +66,9 @@ def get_sawtooth_wave(freq, phase=0, frames=8192, **kwargs):
     if type(freq) not in (int, float):
         freq = float(np.mean(freq))
 
-    nharmonics = max(1, min(128, FPS / 2 // freq))
-    nharmonics = kwargs.get("nharmonics", nharmonics)
+    nharmonics = int(kwargs.get(
+        "nharmonics", max(1, min(128, FPS / 2 // freq)))
+    )
 
     sawtooth = get_sawtooth_cycle(nharmonics, size)
 
@@ -87,13 +88,12 @@ _kdm = _km * _dm
 
 @functools.lru_cache(maxsize=256)
 def get_square_cycle(nharmonics, size=1024):
-    k = nharmonics
     radians = 2 * math.pi * np.arange(0, 1, 1 / size)
     harmonic = (
-        4 / math.pi / k * np.sin(math.pi * _kdm[k]) * np.cos(k * radians)[None, :]
+        4 / math.pi / nharmonics * np.sin(math.pi * _kdm[nharmonics]) * np.cos(nharmonics * radians)[None, :]
     )
 
-    if k == 1:
+    if nharmonics == 1:
         return harmonic + 2 * _kdm[1] - 1
 
     return harmonic + get_square_cycle(nharmonics - 1, size)
@@ -110,8 +110,9 @@ def get_square_wave(freq, phase=0, frames=8192, duty=0.5, **kwargs):
     if type(freq) not in (int, float):
         freq = float(np.mean(freq))
 
-    nharmonics = max(1, min(128, FPS / 2 // freq))
-    nharmonics = kwargs.get("nharmonics", nharmonics)
+    nharmonics = int(
+        kwargs.get("nharmonics", int(max(1, min(128, FPS / 2 // freq))))
+    )
 
     size = 1024
 
