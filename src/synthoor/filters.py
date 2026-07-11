@@ -64,7 +64,7 @@ class BaseFilter(Sound):
         self._f = freq
         self._x = x
 
-        ww = np.arange(0.0, 1.0, 1 / len(x))[:, None]
+        ww = np.linspace(0.0, 1.0, len(x))[:, None]
         a1 = a1 * ww + a0 * (1.0 - ww)
         return a1
 
