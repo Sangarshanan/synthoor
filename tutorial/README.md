@@ -1,7 +1,5 @@
 # Get Started
 
-[Pycon US 2025](https://us.pycon.org/2025/schedule/presentation/19/)
-
 The goal of this tutorial is to break down the abstractions that make up a synthesizer by building one using Python, its scientific computing libraries, and Librosa. We will build the basic components of a modern digital synth from scratch. Along the way, you'll learn DSP and audio programming concepts. By the end, you'll be able to make your own tunes with Python! We'll start with theory and then work through Jupyter notebooks both individually and as a group.
 
 This tutorial will be a lot of fun if you’re a musically inclined Python programmer. As someone interested in music, you will discover the components that make up a synthesizer by literally building & making music with it and as someone interested in Python, you’ll learn a lot about audio programming and signal processing techniques.
@@ -93,3 +91,7 @@ LFOs are used a lot in dubstep and bass heavy electronic tracks for creating a s
 - https://www.musicgateway.com/blog/how-to/what-is-a-synthesizer-the-beginners-guide-together-in-electric-dreams
 - https://www.reddit.com/r/Python/comments/lw50ne/making_a_synthesizer_using_python/
 - https://jupylet.readthedocs.io/en/latest/programmers_reference_guide/synthesis.html
+
+
+Presented at [Pycon US 2025](https://us.pycon.org/2025/schedule/presentation/19/), [EuroPython 2026](https://ep2026.europython.eu/session/build-a-synthesizer-with-python), [Pycon Spain 2026](https://2026.es.pycon.org/en/programa/#session/QAWGUN/)
+
