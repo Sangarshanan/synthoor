@@ -93,5 +93,3 @@ LFOs are used a lot in dubstep and bass heavy electronic tracks for creating a s
 - https://jupylet.readthedocs.io/en/latest/programmers_reference_guide/synthesis.html
 
 
-Presented at [Pycon US 2025](https://us.pycon.org/2025/schedule/presentation/19/), [EuroPython 2026](https://ep2026.europython.eu/session/build-a-synthesizer-with-python), [Pycon Spain 2026](https://2026.es.pycon.org/en/programa/#session/QAWGUN/)
-

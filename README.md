@@ -6,7 +6,7 @@ A Toy Software Synth written in Python.
 pip install synthoor
 ```
 
-### Setup for Tutorial
+### Setup
 
 Hope you have [Python>=3.10](https://www.python.org/downloads/) already, Once you got that you can go ahead and [install uv](https://docs.astral.sh/uv/getting-started/installation/) to get everything set up locally.
 
@@ -29,6 +29,11 @@ docker run -it --rm -p 8888:8888 synthoor
 ```
 
 **Extra:** The last section of the tutorial directly uses the package which would not directly work with docker because it needs a sounddevice, If you are on a Linux machine with PortAudio you can add `--device /dev/snd` to the docker run command and for MacOs follow this instruction: https://devops.datenkollektiv.de/running-a-docker-soundbox-on-mac.html
+
+
+### Tutorial
+
+This was primarily a learning project and to go deeper I made a Youtube series about building the project: https://www.youtube.com/playlist?list=PLc37Ie8gl3e4 I have also presented offline tutorials at [Pycon US 2025](https://us.pycon.org/2025/schedule/presentation/19/), [EuroPython 2026](https://ep2026.europython.eu/session/build-a-synthesizer-with-python) and [Pycon Spain 2026](https://2026.es.pycon.org/en/programa/#session/QAWGUN/)
 
 
 ### Usage
